@@ -3,6 +3,29 @@ var express = require('express');
 var router = express.Router();
 
 
+// POST -> BODY로 전달
+/* GET home page. */
+router.post('/', function(req, res, next) {
+
+  let name = ""
+
+  if(req.body['name'] !== undefined){
+    name = "-" + req.body['name']
+  }
+
+  try{
+    // 6. 동기 방식으로 파일을 생성. 함수의 인자는 앞에서 부터 순서대로 파일명, 입력데이터, 인코딩
+    fs.appendFileSync('./public/logs'+name+'.txt', Date(Date.now()) + " : " +  req.body['log'] + "\n", 'utf-8');
+    res.status(200).json({status: "success", name: name, log: req.body['log']})
+  }catch(e){
+    console.log(e);
+    res.status(400).json({status: "error", name: name, log: req.body['log']})
+  }
+  
+});
+
+
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
